@@ -1,1 +1,54 @@
-const h=document.getElementById("header"),m=document.getElementById("menu"),n=document.getElementById("mobile");addEventListener("scroll",()=>h.classList.toggle("scrolled",scrollY>30));m.addEventListener("click",()=>{const o=n.classList.toggle("open");m.setAttribute("aria-expanded",o)});n.querySelectorAll("a").forEach(a=>a.onclick=()=>{n.classList.remove("open");m.setAttribute("aria-expanded","false")});const ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");ob.unobserve(e.target)}}),{threshold:.14});document.querySelectorAll(".reveal").forEach(e=>ob.observe(e));
+document.addEventListener("DOMContentLoaded", () => {
+    const header = document.getElementById("header");
+    const menuButton = document.getElementById("menu");
+    const mobileMenu = document.getElementById("mobile");
+
+    // Header scroll effect
+    if (header) {
+        window.addEventListener("scroll", () => {
+            header.classList.toggle("scrolled", window.scrollY > 30);
+        });
+    }
+
+    // Mobile menu
+    if (menuButton && mobileMenu) {
+        menuButton.addEventListener("click", () => {
+            const isOpen = mobileMenu.classList.toggle("open");
+            menuButton.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        mobileMenu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                mobileMenu.classList.remove("open");
+                menuButton.setAttribute("aria-expanded", "false");
+            });
+        });
+    }
+
+    // Scroll reveal animations
+    const revealElements = document.querySelectorAll(".reveal");
+
+    if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                threshold: 0.14
+            }
+        );
+
+        revealElements.forEach((element) => {
+            observer.observe(element);
+        });
+    } else {
+        revealElements.forEach((element) => {
+            element.classList.add("visible");
+        });
+    }
+});
